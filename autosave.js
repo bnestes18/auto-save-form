@@ -1,6 +1,6 @@
 ;(function () {
 
-    'use strict'
+    "use strict";
 
     let formElems = Array.prototype.slice.call(document.querySelector('form').elements);
 
@@ -33,7 +33,7 @@
     */
     let deleteUserInfo = function(event) {
         if (!event.target.closest('#save-me')) return;
-        formElems.forEach(function (element) {
+        return formElems.forEach(function (element) {
             localStorage.removeItem(element.id);
         })      
     }
@@ -42,7 +42,7 @@
 
 
     document.addEventListener('input', saveUserInfo, false);       // Listens for all input on text fields
-    document.addEventListener('submit', deleteUserInfo, false);     // Listens for click event on subnit button
+    document.addEventListener('submit', deleteUserInfo, false);     // Listens for click event on submit button
 
 })();
 
