@@ -1,0 +1,20 @@
+body {
+    max-width: 15rem;
+    margin: auto;
+}
+
+h1 {
+    margin-top: 5rem;
+    text-align: center;  
+}
+
+input, label, textarea {
+    display: block;
+    width: 15rem;
+}
+
+label {
+    margin: .3rem 0 .3rem 0;
+}
+
+
