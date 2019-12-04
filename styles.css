@@ -3,9 +3,11 @@ body {
     margin: auto;
 }
 
+.description, .note {
+    text-align: justify;
+}
 h1 {
-    margin-top: 5rem;
-    text-align: center;  
+    margin-top: 5rem;  
 }
 
 input, label, textarea {

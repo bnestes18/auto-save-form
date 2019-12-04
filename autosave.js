@@ -2,8 +2,13 @@
 
     "use strict";
 
+    // VARIABLES
     let formElems = Array.prototype.slice.call(document.querySelector('form').elements);
-/*
+    
+
+    // FUNCTIONS
+
+    /*
     This function gets the id or name attribute value from the input field 
     */
     let getId = function (field) {
@@ -17,41 +22,61 @@
 
         return null;
     }
+    /*
+    This function takes the input input key/value pairs and puts 
+    them into an object that is stored in local storage 
+    */
+    let addToLocalStorageObject = function (name, key, value) {
+        // Get the existing data
+        let existing = localStorage.getItem(name);
 
+        // If there's existing data in localStorage, convert the data into 
+        // an object.  If not, create a new object
+        existing = existing ? JSON.parse(existing) : {};
+
+        // Add the key/value pair onto the object
+        existing[key] = value;
+
+        // Convert the object back into JSON and store the new item into localStorage object
+        localStorage.setItem(name, JSON.stringify(existing))
+
+    }
     /*
     This function saves the user input data locally (localStorage api) 
     */
-    let saveUserInfo = function (event) {
+    let saveUserInfo = function () {
 
-        
-        // Stop the callback function if the target is not an input/textarea field in the form
-        if (!formElems.includes(event.target)) return;     
+       return formElems.forEach(function (element) {
 
         // Get an ID for the input field
-        let id = getId(event.target);
+        let id = getId(element);
         if (!id) return;
 
-        // Otherwise, save the input value to local storage 
-        return localStorage.setItem(id, event.target.value);
+        // Otherwise, store the input values into local storage object
+        addToLocalStorageObject('data', id, element.value)
+       }) 
+        
     }
     /*
     This function retrieves the saved user input and sets the saved value as the input value.
     The data will persist on browser refresh and open/close of browser 
     */
     let persistUserInfo = function () {
+        
         return formElems.forEach(function (element) {
+        // Get an ID value for the input field
+        let id = getId(element);
+        // If the element has no ID, skip it
+        if (!id) return;
+        // Get the object of the saved values and convert into an obj
+        let savedValues = JSON.parse(localStorage.getItem('data'));
 
-            // Get an ID for the input field
-            let id = getId(element);
-            // If the element has no ID, skip it
-            if (!id) return;
-
-            // Get the saved element id
-            let savedValue = localStorage.getItem(element.id);
-            // Skip if element does not have a saved value
-            if (!savedValue) return;            
-            // Otherwise, set the saved value to the input value
-            element.value = savedValue;
+            // Loop through savedValues object, and set the saved value to the input value
+            for (let value in savedValues) {
+                if (id === value) {
+                    element.value = savedValues[value];
+                }
+            }
         })
     }
     /*
@@ -60,15 +85,8 @@
     let deleteUserInfo = function(event) {
         if (!event.target.closest('#save-me')) return;
 
-        return formElems.forEach(function (element) {
-
-            // Get an ID for the input field
-            let id = getId(element);
-            if (!id) return;
-
-            // Clear all data from local storage
-            localStorage.removeItem(element.id);
-        })      
+        // Remove the single localStorage object (named data)
+        localStorage.removeItem('data');  
     }
 
     persistUserInfo();      // Persist user data on load
@@ -78,4 +96,3 @@
     document.addEventListener('submit', deleteUserInfo, false);     // Listens for click event on submit button
 
 })();
-
