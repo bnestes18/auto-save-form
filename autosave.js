@@ -51,9 +51,12 @@
         // Get an ID for the input field
         let id = getId(element);
         if (!id) return;
+        
+        // Store the input values into local storage object
+        if (element.value !== "") {
+            addToLocalStorageObject('data', id, element.value);
+        }
 
-        // Otherwise, store the input values into local storage object
-        addToLocalStorageObject('data', id, element.value)
        }) 
         
     }
@@ -66,17 +69,19 @@
         return formElems.forEach(function (element) {
         // Get an ID value for the input field
         let id = getId(element);
-        // If the element has no ID, skip it
+        // If the element has no ID, skip it (i.e. button element)
         if (!id) return;
-        // Get the object of the saved values and convert into an obj
-        let savedValues = JSON.parse(localStorage.getItem('data'));
 
-            // Loop through savedValues object, and set the saved value to the input value
-            for (let value in savedValues) {
-                if (id === value) {
-                    element.value = savedValues[value];
-                }
-            }
+        // Get the object of the saved values and convert into an obj
+        let savedValues = localStorage.getItem('data');
+        if(!savedValues) return;
+        savedValues = JSON.parse(savedValues);
+
+        // If there is no saved input value to persist, skip it
+        if(!savedValues[id]) return;
+
+        // Otherwise, set the saved value to the input value
+        element.value = savedValues[id]; 
         })
     }
     /*
