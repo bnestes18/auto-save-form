@@ -1,10 +1,11 @@
-;(function () {
+;
+(function () {
 
     "use strict";
 
     // VARIABLES
     let formElems = Array.prototype.slice.call(document.querySelector('form').elements);
-    
+
 
     // FUNCTIONS
 
@@ -55,8 +56,8 @@
             if (element.type === 'radio' && element.checked === true) {
                 return element.value;
             }
-        })    
-    
+        })
+
         // Check if the checkbox has been checked
         if (event.target.type === 'checkbox') {
             event.target.value = event.target.checked ? 'on' : 'off';
@@ -72,49 +73,49 @@
     The data will persist on browser refresh and open/close of browser 
     */
     let persistUserInfo = function () {
-        
+
         // Get the object of the saved values and convert into an obj
         let savedValues = localStorage.getItem('data');
-        if(!savedValues) return;
+        if (!savedValues) return;
         savedValues = JSON.parse(savedValues);
 
         return formElems.forEach(function (element) {
-        // Get an ID value for the input field
-        let id = getId(element);
-        // If the element has no ID, skip it (i.e. button element)
-        if (!id) return;
+            // Get an ID value for the input field
+            let id = getId(element);
+            // If the element has no ID, skip it (i.e. button element)
+            if (!id) return;
 
-        // If there is no saved input value to persist, skip it
-        if(!savedValues[id]) return;
-        
-        // Radio: Check if radio button value is equal to the saved radio button value.
-        // If so, keep the radio button checked.        
-        // Checkbox: Check if the element is a checkbox.  If it is, 
-        if (element.type === 'radio') {
-            element.checked = element.value === savedValues[id] ? true : false;
-        } else if (element.type === 'checkbox'){
-            element.checked = savedValues[id] === 'on' ? true : false;
-        } else {
-            // Otherwise, set the saved value to the input value
-            element.value = savedValues[id]; 
-        }
+            // If there is no saved input value to persist, skip it
+            if (!savedValues[id]) return;
+
+            // Radio: Check if radio button value is equal to the saved radio button value.
+            // If so, set its checked state.        
+            // Checkbox: Check if the element is a checkbox.  If it is, set the checked state
+            if (element.type === 'radio') {
+                element.checked = element.value === savedValues[id] ? true : false;
+            } else if (element.type === 'checkbox') {
+                element.checked = savedValues[id] === 'on' ? true : false;
+            } else {
+                // Otherwise, set the saved value to the input value
+                element.value = savedValues[id];
+            }
 
         })
     }
     /*
     This function deletes all saved data from local storage and user input fields
     */
-    let deleteUserInfo = function(event) {
+    let deleteUserInfo = function (event) {
         if (!event.target.closest('#save-me')) return;
 
         // Remove the single localStorage object (named data)
-        localStorage.removeItem('data');  
+        localStorage.removeItem('data');
     }
 
-    persistUserInfo();      // Persist user data on load
+    persistUserInfo(); // Persist user data on load
 
 
-    document.addEventListener('input', saveUserInfo, false);       // Listens for all input on text fields
-    document.addEventListener('submit', deleteUserInfo, false);     // Listens for click event on submit button
+    document.addEventListener('input', saveUserInfo, false); // Listens for all input on text fields
+    document.addEventListener('submit', deleteUserInfo, false); // Listens for click event on submit button
 
 })();
