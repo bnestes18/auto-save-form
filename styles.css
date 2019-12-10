@@ -16,7 +16,14 @@ input, label, textarea {
 }
 
 label {
+    position: relative;
     margin: .3rem 0 .3rem 0;
+}
+
+.selectables {
+    position: absolute;
+    top: .2rem;
+    left: 2rem;
 }
 
 

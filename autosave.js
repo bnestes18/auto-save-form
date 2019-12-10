@@ -5,6 +5,7 @@
     // VARIABLES
     let formElems = Array.prototype.slice.call(document.querySelector('form').elements);
     
+
     // FUNCTIONS
 
     /*
@@ -58,7 +59,7 @@
     
         // Check if the checkbox has been checked
         if (event.target.type === 'checkbox') {
-            return event.target.value = event.target.checked ? 'On' : 'Off';
+            event.target.value = event.target.checked ? 'On' : 'Off';
         }
 
         // Store the input values into local storage object
@@ -82,20 +83,21 @@
         let id = getId(element);
         // If the element has no ID, skip it (i.e. button element)
         if (!id) return;
+
+        // If there is no saved input value to persist, skip it
+        if(!savedValues[id]) return;
         
         // Check if radio button value is equal to the saved radio button value.
         // If so, keep the radio button checked
-        if (element.type === 'radio' && element.value === savedValues[id]) {
-            element.checked = true;
+        if (element.type === 'radio') {
+            element.checked = element.value === savedValues[id] ? true : false;
+        } else if (element.type === 'checkbox'){
+            element.checked = element.value ? true : false;
         } else {
-            // If there is no saved input value to persist, skip it
-            if(!savedValues[id]) return; 
-
             // Otherwise, set the saved value to the input value
             element.value = savedValues[id]; 
-            console.log(element.value);
-            }
-        
+        }
+
         })
     }
     /*
