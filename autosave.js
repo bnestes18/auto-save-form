@@ -5,7 +5,6 @@
     // VARIABLES
     let formElems = Array.prototype.slice.call(document.querySelector('form').elements);
     
-
     // FUNCTIONS
 
     /*
@@ -44,21 +43,28 @@
     /*
     This function saves the user input data locally (localStorage api) 
     */
-    let saveUserInfo = function () {
-
-       return formElems.forEach(function (element) {
+    let saveUserInfo = function (event) {
 
         // Get an ID for the input field
-        let id = getId(element);
+        let id = getId(event.target);
         if (!id) return;
-        
-        // Store the input values into local storage object
-        if (element.value !== "") {
-            addToLocalStorageObject('data', id, element.value);
+
+        // Check if the radio button has been checked and set the va
+        formElems.forEach(function (element) {
+            if (element.type === 'radio' && element.checked === true) {
+                return element.value;
+            }
+        })    
+    
+        // Check if the checkbox has been checked
+        if (event.target.type === 'checkbox') {
+            return event.target.value = event.target.checked ? 'On' : 'Off';
         }
 
-       }) 
-        
+        // Store the input values into local storage object
+        if (event.target.value) {
+            addToLocalStorageObject('data', id, event.target.value);
+        }
     }
     /*
     This function retrieves the saved user input and sets the saved value as the input value.
@@ -66,22 +72,30 @@
     */
     let persistUserInfo = function () {
         
-        return formElems.forEach(function (element) {
-        // Get an ID value for the input field
-        let id = getId(element);
-        // If the element has no ID, skip it (i.e. button element)
-        if (!id) return;
-
         // Get the object of the saved values and convert into an obj
         let savedValues = localStorage.getItem('data');
         if(!savedValues) return;
         savedValues = JSON.parse(savedValues);
 
-        // If there is no saved input value to persist, skip it
-        if(!savedValues[id]) return;
+        return formElems.forEach(function (element) {
+        // Get an ID value for the input field
+        let id = getId(element);
+        // If the element has no ID, skip it (i.e. button element)
+        if (!id) return;
+        
+        // Check if radio button value is equal to the saved radio button value.
+        // If so, keep the radio button checked
+        if (element.type === 'radio' && element.value === savedValues[id]) {
+            element.checked = true;
+        } else {
+            // If there is no saved input value to persist, skip it
+            if(!savedValues[id]) return; 
 
-        // Otherwise, set the saved value to the input value
-        element.value = savedValues[id]; 
+            // Otherwise, set the saved value to the input value
+            element.value = savedValues[id]; 
+            console.log(element.value);
+            }
+        
         })
     }
     /*
