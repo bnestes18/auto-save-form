@@ -59,7 +59,7 @@
     
         // Check if the checkbox has been checked
         if (event.target.type === 'checkbox') {
-            event.target.value = event.target.checked ? 'On' : 'Off';
+            event.target.value = event.target.checked ? 'on' : 'off';
         }
 
         // Store the input values into local storage object
@@ -87,12 +87,13 @@
         // If there is no saved input value to persist, skip it
         if(!savedValues[id]) return;
         
-        // Check if radio button value is equal to the saved radio button value.
-        // If so, keep the radio button checked
+        // Radio: Check if radio button value is equal to the saved radio button value.
+        // If so, keep the radio button checked.        
+        // Checkbox: Check if the element is a checkbox.  If it is, 
         if (element.type === 'radio') {
             element.checked = element.value === savedValues[id] ? true : false;
         } else if (element.type === 'checkbox'){
-            element.checked = element.value ? true : false;
+            element.checked = savedValues[id] === 'on' ? true : false;
         } else {
             // Otherwise, set the saved value to the input value
             element.value = savedValues[id]; 

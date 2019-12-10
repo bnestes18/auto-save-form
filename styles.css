@@ -1,21 +1,22 @@
 body {
-    max-width: 15rem;
+    max-width: 25rem;
     margin: auto;
 }
 
 .description, .note {
-    text-align: justify;
+    text-align: left;
 }
 h1 {
     margin-top: 5rem;  
 }
 
-input, label, textarea {
+input, select, textarea {
     display: block;
-    width: 15rem;
+    width: 25rem;
 }
 
 label {
+    display: block;
     position: relative;
     margin: .3rem 0 .3rem 0;
 }
@@ -23,7 +24,7 @@ label {
 .selectables {
     position: absolute;
     top: .2rem;
-    left: 2rem;
+    left: -2.5rem;
 }
 
 
